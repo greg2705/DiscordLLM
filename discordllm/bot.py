@@ -6,8 +6,6 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
-SYSTEM_PROMPT_CHAT = """You are a helpful, friendly, and knowledgeable assistant on Discord. Your goal is to assist users with a wide range of tasks and inquiries, from answering questions and providing information to facilitating conversations and managing tasks within the server."""
-
 load_dotenv()
 
 # Access the variables
@@ -59,7 +57,7 @@ async def chat_public(interaction: discord.Interaction) -> None:
 @bot.event
 async def on_message(message: discord.Message) -> None:
     # Ignore messages from the bot itself
-    if message.author == bot.user:
+    if message.author.id == bot.user.id :
         return
 
     # Check if the message is in one of the tracked threads
@@ -73,8 +71,12 @@ async def on_message(message: discord.Message) -> None:
             return
 
         async with message.channel.typing():
-            prompt = await utils.create_history(message, SYSTEM_PROMPT_CHAT)
-            answer = await utils.get_chat_completion(client, prompt)
+            try:
+                prompt = await utils.create_history(message)
+                answer = await utils.get_chat_completion(client, prompt)
+            except Exception as e:
+                 await message.channel.send("An error occurred, please retry later")
+                 return
             await message.channel.send(answer)
 
 

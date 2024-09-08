@@ -2,7 +2,7 @@
 name = "DiscordLLM"
 version = "1.0.0"
 description = "Tools to connect Discord and LLM"
-authors = ["Your Name <you@example.com>"]
+authors = ["gregoire2705@gmail.com"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
